@@ -1,0 +1,28 @@
+.search-form__checkbox-label {
+    width: 167px;
+    display: flex;
+    align-items: center;
+    margin-bottom: auto;
+    margin-top: auto;
+    padding-left: 29px;
+    border-left: 1px solid #E8E8E8;
+    height: 40px;
+    cursor: pointer;
+    justify-self: end;
+    margin-right: 30px;
+}
+
+@media (max-width: 768px) {
+    .search-form__checkbox-label {
+        padding-left: 19px;
+        margin-right: 20px;
+
+    }
+}
+
+@media (max-width: 630px) {
+    .search-form__checkbox-label {
+        margin: 46px auto 45px;
+        border: none;
+    }
+}

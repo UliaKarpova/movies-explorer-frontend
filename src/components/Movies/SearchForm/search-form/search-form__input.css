@@ -1,0 +1,27 @@
+.search-form__input {
+    border: none;
+    height: 72px;
+    max-width: 786px;
+    background: #F9F9F9;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: 0px;
+    text-align: left;
+    color: #A0A0A0;
+    flex-grow: 1;
+    padding: 0;
+}
+
+.search-form__input:focus {
+    outline: none;
+}
+
+@media (max-width: 630px) {
+    .search-form__input {
+        font-size: 14px;
+        padding-left: 19px;
+
+
+    }
+}

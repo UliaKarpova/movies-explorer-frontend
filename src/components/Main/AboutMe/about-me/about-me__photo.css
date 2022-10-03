@@ -1,0 +1,22 @@
+.about-me__photo {
+    object-fit: cover;
+    width: 270px;
+    height: 327px;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 950px) {
+    .about-me__photo {
+        width: 255px;
+        height: 307px;
+    }
+}
+
+@media (max-width: 670px) {
+    .about-me__photo {
+        margin: 0 auto 40px;
+        width: 292px;
+        height: 352px;
+    }
+}

@@ -1,0 +1,21 @@
+.menu {
+    display: grid;
+    margin: 151px auto 0;
+    grid-template-columns: repeat(3, 96px);
+    grid-column-gap: 10px;
+    width: fit-content;
+}
+
+@media (max-width: 768px) {
+    .menu {
+        margin: 314px auto 0;
+    }
+}
+
+@media (max-width: 500px) {
+    .menu {
+        margin: 212px auto 0;
+        grid-template-columns: repeat(3, 82px);
+        grid-column-gap: 6px;
+    }
+}

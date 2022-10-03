@@ -1,0 +1,24 @@
+.about-me__line {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0px;
+    text-align: left;
+    margin: 18px 0 26px;
+}
+
+@media (max-width: 768px) {
+    .about-me__line {
+        font-size: 12px;
+        line-height: 18px;
+        margin: 16px 0 20px;
+    }
+}
+
+@media (max-width: 670px) {
+    .about-me__line {
+        margin-top: 20px;
+        font-size: 11px;
+        line-height: 16px;
+    }
+}

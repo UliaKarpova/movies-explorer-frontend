@@ -1,0 +1,21 @@
+.burger__label {
+    background-image: url('../../../images/burger.svg');
+    background-position: center;
+    margin: 0;
+    width: 44px;
+    height: 44px;
+    display: block;
+    cursor: pointer;
+}
+
+
+.burger__check-menu:checked ~ .burger__label {
+    background-image: url('../../../images/closeIcon.svg');
+    background-position: center;
+    z-index: 5;
+    position: absolute;
+    top: 22.44px;
+    right: 22.44px;
+    width: 22px;
+    height: 22px;
+}

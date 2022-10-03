@@ -1,0 +1,19 @@
+.about-project__progress {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 0 0 110px;
+    padding: 0;
+}
+
+@media (max-width: 768px) {
+    .about-project__progress {
+        margin: 0 0 90px;
+    }
+}
+
+@media (max-width: 550px) {
+    .about-project__progress {
+        margin: 0 0 70px;
+    }
+}

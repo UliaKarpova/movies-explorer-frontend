@@ -1,0 +1,23 @@
+.about-project__container {
+    max-width: 1140px;
+    display: flex;
+    grid-column-gap: 40px;
+    margin: 70px auto 110px;
+    text-align: left;
+    padding: 0;
+}
+
+@media (max-width: 768px) {
+    .about-project__container {
+        margin: 70px auto 93px;
+        grid-column-gap: 30px;
+    }
+}
+
+@media (max-width: 550px) {
+    .about-project__container {
+        margin: 60px auto 60px;
+        flex-direction: column;
+        grid-row-gap: 56px;
+    }
+}

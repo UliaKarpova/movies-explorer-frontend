@@ -1,0 +1,19 @@
+.burger__link {
+    display: block;
+    top: 0;
+    right: 0;
+    color: #000;
+    transform: translateY(50%);
+    text-decoration: none;
+    background: #FFF;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+    letter-spacing: 0px;
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.burger__link_active {
+    text-decoration: underline;
+}

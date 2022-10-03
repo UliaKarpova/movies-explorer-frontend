@@ -1,0 +1,28 @@
+.search-form__button {
+    background-color: #2BE080;
+    background-image: url(../../../../images/find.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    height: 34px;
+    width: 34px;
+    border: none;
+    margin-top: 19px;
+    margin-right: 30px;
+    justify-self: flex-end;
+    padding: 0;
+}
+
+@media (max-width: 768px) {
+    .search-form__button {
+        margin-right: 19px;
+
+    }
+}
+
+@media (max-width: 630px) {
+    .search-form__button {
+        position: absolute;
+        right: 0;
+    }
+}

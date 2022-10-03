@@ -1,0 +1,19 @@
+.footer__link {
+    text-decoration: none;
+    color: #000;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0px;
+    text-align: left;
+}
+
+@media (max-width: 400px) {
+    .footer__link {
+        text-align: center;
+        font-family: Inter;
+        font-size: 12px;
+        line-height: 15px;
+        margin-bottom: 12px;
+    }
+}
