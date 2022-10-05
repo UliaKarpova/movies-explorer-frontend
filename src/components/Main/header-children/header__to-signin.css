@@ -11,7 +11,7 @@
     text-decoration: none;
 }
 
-@media (max-width: 320px) {
+@media (max-width: 400px) {
     .header__to-signin {
         width: 54px;
         height: 26px;

@@ -5,16 +5,16 @@ function Footer() {
     const year = new Date();
 
     return (
-        <section className='footer'>
+        <footer className='footer'>
             <h2 className='footer__title'>Учебный проект Яндекс.Практикум и BeatFilm.</h2>
             <div className='footer__rights'>
                 <div className='footer__rights-links'>
-                    <a href='https://practicum.yandex.ru/' className='footer__link'>Яндекс.Практикум</a>
-                    <a href='https://github.com/' className='footer__link'>Github</a>
+                    <a href='https://practicum.yandex.ru/' target='_blank' rel='noreferrer noopener' className='footer__link'>Яндекс.Практикум</a>
+                    <a href='https://github.com/' target='_blank' rel='noreferrer noopener' className='footer__link'>Github</a>
                 </div>
                 <span className='footer__year'>&copy; {year.getFullYear()}</span>
             </div>
-        </section>
+        </footer>
     )
 }
 

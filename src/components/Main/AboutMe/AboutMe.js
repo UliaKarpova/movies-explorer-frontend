@@ -17,8 +17,8 @@ function AboutMe() {
                 и походы выходного дня. С 2012 г. работала верстальщиком в полиграфии, но захотелось расширить свои знания 
                 и сменить сферу деятельности. Сейчас заканчиваю курс по веб-разработке и активно ищу новую работу.</p>
                 <div className='about-me__links'>
-                    <a href='https://github.com/UliaKarpova' className='about-me__link'>Github</a>
-                    <a href='https://t.me/Ulia_Karpova' className='about-me__link'>Telegram</a>
+                    <a href='https://github.com/UliaKarpova' target='_blank' rel='noreferrer noopener' className='about-me__link'>Github</a>
+                    <a href='https://t.me/Ulia_Karpova' target='_blank' rel='noreferrer noopener' className='about-me__link'>Telegram</a>
                 </div>
             </div>
             </div>

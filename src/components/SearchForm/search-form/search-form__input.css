@@ -16,6 +16,10 @@
 
 .search-form__input:focus {
     outline: none;
+    background: #fff;
+    border: 1px solid #2BE080;
+    padding: 5px;
+    margin-right: 5px;
 }
 
 @media (max-width: 630px) {
