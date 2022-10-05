@@ -1,0 +1,28 @@
+.card__button {
+    position: absolute;
+    background-image: url(../../../images/flag.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+    background-color: #F9F9F9;
+    width: 30px;
+    height: 30px;
+    border: none;
+    padding: 0;
+    right: 14px;
+    top: 19px;
+}
+
+.card__button:hover {
+    cursor: pointer;
+}
+
+.active {
+    background-color: #2BE080;
+    background-image: url(../../../images/whiteFlag.svg);
+
+}
+
+.card__button_type_saved {
+    background-image: url(../../../images/savedCardRemove.svg);
+}

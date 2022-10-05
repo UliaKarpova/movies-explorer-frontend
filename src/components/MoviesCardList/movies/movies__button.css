@@ -1,0 +1,21 @@
+.movies__button {
+    margin: 50px auto 80px;
+    width: 320px;
+    height: 36px;
+    border: 1px solid #E8E8E8;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    align-items: center;
+    text-align: center;
+    color: #000000;
+    border-radius: 9px;
+    background-color: #fff;
+}
+
+@media (max-width: 550px) {
+    .movies__button {
+        width: 240px;
+    }
+}

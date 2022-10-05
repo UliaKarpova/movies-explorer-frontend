@@ -1,0 +1,15 @@
+.profile__logout {
+    background: none;
+    margin: 0 auto;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: 0px;
+    text-align: center;
+    color: #EE3465;
+    text-decoration: none;
+}
+
+.profile__logout:hover {
+    cursor: pointer;
+}

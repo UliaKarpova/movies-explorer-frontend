@@ -1,5 +1,5 @@
 .burger__menu {
-    position: absolute;
+    position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -12,10 +12,24 @@
     height: 0;
     overflow: hidden;
     margin: 0;
-    padding: 0;
+    transition: all 0.5s ease;
 }
 
 .burger__check-menu:checked ~ .burger__menu {
     height: 100vh;
     background: rgba(0, 0, 0, 0.3);
+    animation-duration: 1s;
+    animation-name: slidein;
+  }
+  
+  @keyframes slidein {
+    from {
+      margin-left: 100%;
+      width: 300%;
+    }
+  
+    to {
+      margin-left: 0%;
+      width: 100%;
+    }
 }

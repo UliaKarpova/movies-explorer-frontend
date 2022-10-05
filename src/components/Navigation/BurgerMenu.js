@@ -7,7 +7,7 @@ function BurgerMenu({route}) {
     <>
         <div className='burger'>
           <input type='checkbox' id='check-menu' className='burger__check-menu' />
-          <label for='check-menu' className='burger__label' />
+          <label htmlFor='check-menu' className='burger__label' />
           <div className='burger__menu'>
                 <nav className='burger__links-block'>
                     <Link to='/' className='burger__link'>Главная</Link>

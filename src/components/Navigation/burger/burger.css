@@ -11,9 +11,9 @@
         z-index: 99;
     }
 }
-/*
-@media (max-width: 550px) {
+
+@media (max-width: 400px) {
     .burger {
-      
+        margin-right: 14px;
     }
-}*/
+}

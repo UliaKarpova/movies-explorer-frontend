@@ -24,5 +24,6 @@
     .search-form__checkbox-label {
         margin: 46px auto 45px;
         border: none;
+        padding-left: 0;
     }
 }

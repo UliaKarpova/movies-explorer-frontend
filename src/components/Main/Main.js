@@ -17,12 +17,14 @@ function Main() {
           <Link to='/signup' className='header__to-signup'>Регистрация</Link>
           <Link to='/signin' className='header__to-signin'>Войти</Link> 
         </nav>
-      </Header>  
-      <Promo />
-      <AboutProject />
-      <Techs />
-      <AboutMe />
-      <Portfolio />
+      </Header>
+      <main className='main'>
+        <Promo />
+        <AboutProject />
+        <Techs />
+        <AboutMe />
+        <Portfolio />
+      </main>
       <Footer />
     </>
   );

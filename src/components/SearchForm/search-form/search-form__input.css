@@ -11,6 +11,7 @@
     color: #A0A0A0;
     flex-grow: 1;
     padding: 0;
+    border-radius: 9px;
 }
 
 .search-form__input:focus {
@@ -21,7 +22,7 @@
     .search-form__input {
         font-size: 14px;
         padding-left: 19px;
-
+        width: 100%;
 
     }
 }

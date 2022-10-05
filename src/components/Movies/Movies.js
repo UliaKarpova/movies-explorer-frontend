@@ -3,11 +3,13 @@ import { Link  } from 'react-router-dom';
 import './Movies.css';
 import Header from '../Header/Header';
 import BurgerMenu from '../Navigation/BurgerMenu';
-import SearchForm from './SearchForm/SearchForm';
+import SearchForm from '../SearchForm/SearchForm';
+import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 
 function Movies() {
   const route = 'movies';
+  const isSavedRoute = false;
   return (
     <>
       <Header>
@@ -18,8 +20,13 @@ function Movies() {
         <Link to='/profile' className='header__to-profile'>Аккаунт</Link>
         <BurgerMenu route={route} />
       </Header>
-      <SearchForm />
-      {/* <Footer /> */}
+      <main>
+        <SearchForm />
+        <MoviesCardList isSaved={isSavedRoute}>
+          <button type='button' className='movies__button'>Ещё</button>
+        </MoviesCardList>
+      </main>
+      <Footer />
     </>
   );
 }

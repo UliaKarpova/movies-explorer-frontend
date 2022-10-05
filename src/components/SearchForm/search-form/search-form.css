@@ -11,7 +11,7 @@
 
 .search-form::before {
     content: '';
-    background-image: url(../../../../images/loupe.svg);
+    background-image: url(../../../images/loupe.svg);
     background-position: center;
     background-repeat: no-repeat;
     width: 34px;
@@ -38,6 +38,8 @@
         margin: 80px 10px 46px;
         flex-direction: column;
         position: relative;
+        background-color: #fff;
+        height: 136px;
     }
 
     .search-form::before {
