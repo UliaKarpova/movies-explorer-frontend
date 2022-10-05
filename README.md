@@ -8,4 +8,4 @@
 CRA, БЭМ, GIT
 
 Ссылка на макет: https://disk.yandex.ru/d/tb_C7qF6dw2poQ
-Ссылка на Pull Request:
+Ссылка на Pull Request: https://github.com/UliaKarpova/movies-explorer-frontend/pull/1
