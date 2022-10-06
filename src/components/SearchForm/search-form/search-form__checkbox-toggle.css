@@ -8,6 +8,10 @@
     z-index: 0;
 }
 
+.search-form__checkbox-toggle:hover {
+    cursor: pointer;
+}
+
 .search-form__checkbox-toggle::after {
     content: '';
     position: absolute;
