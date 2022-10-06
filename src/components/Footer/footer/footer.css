@@ -1,0 +1,24 @@
+.footer {
+    padding-bottom: 20px;
+    background: #FAFAFA;
+}
+
+@media (max-width: 1280px) {
+    .footer {
+        padding: 0 70px 20px;
+
+    }
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding: 0 30px 20px;
+        background: none;
+    }
+}
+
+@media (max-width: 400px) {
+    .footer {
+        padding: 0 10px 37px;
+    }
+}

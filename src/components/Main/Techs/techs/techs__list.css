@@ -1,0 +1,17 @@
+.techs__list {
+    max-width: 1140px;
+    display: flex;
+    flex-direction: row;
+    grid-column-gap: 10px;
+    margin: 0 auto;
+    padding: 0;
+    justify-content: center;
+}
+
+@media (max-width: 550px) {
+    .techs__list {
+        display: grid;
+        grid-template-columns: repeat(2, 84px);
+        grid-row-gap: 10px;
+    }
+}

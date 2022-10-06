@@ -1,0 +1,9 @@
+.burger__close-icon {
+    position: absolute;
+    top: 22.44px;
+    right: 22.44px;
+    object-fit: contain;
+    width: 22px;
+    height: 22px;
+    z-index: 1;
+}

@@ -1,0 +1,12 @@
+.header__to-movies {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: right;
+    justify-self: flex-start;
+    margin-left: 44px;
+    margin-right: 16px;
+    text-decoration: none;
+    color: #000;
+}

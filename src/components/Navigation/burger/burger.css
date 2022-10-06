@@ -1,0 +1,19 @@
+.burger {
+    display: none;
+    top: 0;
+    right: 0;
+    margin-right: 30px;
+}
+
+@media (max-width: 768px) {
+    .burger {
+        display: block;
+        z-index: 99;
+    }
+}
+
+@media (max-width: 400px) {
+    .burger {
+        margin-right: 14px;
+    }
+}

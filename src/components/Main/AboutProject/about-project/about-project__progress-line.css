@@ -1,0 +1,8 @@
+.about-project__progress-line {
+    list-style: none;
+    width: 80%;
+}
+
+.line-for-green {
+    width: 20%;
+}

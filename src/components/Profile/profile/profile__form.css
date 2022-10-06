@@ -1,0 +1,10 @@
+.profile__form {
+    max-width: 410px;
+    margin: 0 auto;
+}
+
+@media (max-width: 500px) {
+    .profile__form {
+        max-width: 260px;
+    }
+}

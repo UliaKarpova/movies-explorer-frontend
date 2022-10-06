@@ -1,0 +1,23 @@
+.about-project__progress-span {
+    background: #F2F2F2;
+    height: 36px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 36px;
+    letter-spacing: 0em;
+    text-align: center;
+    margin: 0 0 14px;
+}
+
+@media (max-width: 550px) {
+    .about-project__progress-span {
+        height: 35px;
+        font-size: 11px;
+        line-height: 35px;
+        margin: 0 0 10px;
+    }
+}
+
+.span-green {
+    background: #2BE080;
+}
