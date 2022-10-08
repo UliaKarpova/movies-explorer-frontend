@@ -7,7 +7,8 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 
-function Movies() {
+function Movies({ movies, findMovies }) {
+  console.log(movies);
   const route = 'movies';
   const isSavedRoute = false;
   return (
@@ -21,8 +22,8 @@ function Movies() {
         <BurgerMenu route={route} />
       </Header>
       <main>
-        <SearchForm />
-        <MoviesCardList isSaved={isSavedRoute}>
+        <SearchForm findMovies={findMovies} />
+        <MoviesCardList movies={movies} isSaved={isSavedRoute}>
           <button type='button' className='movies__button'>Ещё</button>
         </MoviesCardList>
       </main>

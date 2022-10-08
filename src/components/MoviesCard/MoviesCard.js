@@ -1,7 +1,7 @@
 import React from 'react';
 import './MoviesCard.css';
 
-function MoviesCard({movieDuration, movieImage, movieTitle, isSaved}) {
+function MoviesCard({ movieDuration, movieImage, movieTitle, isSaved }) {
     const buttonClass = `card__button ${isSaved ? 'card__button_type_saved' : ''}`;
 
     function buttonToggle(event) {

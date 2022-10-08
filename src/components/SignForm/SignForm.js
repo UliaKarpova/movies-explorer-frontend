@@ -2,16 +2,17 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './SignForm.css';
 
-function SignMain({ children, submitText, redirectText, redirectRoute, linkText }) {
+function SignMain({ children, onSubmit, onChange, submitText, redirectText, redirectRoute, linkText }) {
+
 
     return (
-        <form className='form'>
+        <form className='form' onSubmit={onSubmit}>
             {children}
             <label htmlFor='email' className='form__label'>E-mail</label>
-            <input type='email' name='email' id='email' defaultValue='user@mail.ru' className='form__input correct' />
+            <input type='email' name='email' id='email' onChange={onChange} defaultValue='user@mail.ru' className='form__input correct' />
             <span className='form__error'>Что-то пошло не так...</span>
             <label htmlFor='password' className='form__label'>Пароль</label>
-            <input type='password' name='password' id='password' defaultValue='12345' className='form__input uncorrect' />
+            <input type='password' name='password' id='password'onChange={onChange} defaultValue='12345' className='form__input uncorrect' />
             <span className='form__error form__error_visible'>Что-то пошло не так...</span>
             <button type='submit' className='form__submit'>{submitText}</button>
             <p className='form__redirect'>{redirectText} 
