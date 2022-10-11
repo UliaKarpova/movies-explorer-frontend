@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+
 import SignHeader from '../SignHeader/SignHeader';
 import SignForm from '../SignForm/SignForm';
 
@@ -7,11 +8,10 @@ function Login({ onSubmit }) {
   const [values, setValues] = useState({});
 
   const handleChange = (event) => {
-      const { name, value } = event.target;
-      setValues({...values,
-          [name]: value,
-      })
-      console.log(values);
+    const { name, value } = event.target;
+     setValues({...values,
+      [name]: value,
+    })
   }
 
   function handleSubmit(event) {
@@ -22,8 +22,13 @@ function Login({ onSubmit }) {
 
   return (
     <>
-        <SignHeader title='Рады видеть!' />
-        <SignForm onSubmit={handleSubmit} onChange={handleChange} submitText='Войти' redirectText='Ещё не зарегистрированы? ' redirectRoute='/signup' linkText='Регистрация' />
+      <SignHeader title='Рады видеть!' />
+      <SignForm onSubmit={handleSubmit} 
+        onChange={handleChange} 
+        submitText='Войти' 
+        redirectText='Ещё не зарегистрированы? ' 
+        redirectRoute='/signup' 
+        linkText='Регистрация' />
     </>
   );
 }

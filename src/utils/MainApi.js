@@ -1,3 +1,5 @@
+const token = localStorage.getItem('token');
+
 class MainApi {
     constructor(config) {
         this._url = config.url;
@@ -11,44 +13,41 @@ class MainApi {
         return res.json();
     }
 
-    getUserInfo = () => {
-        return fetch(`${this._url}/users/me`, {
+    getSavedMovies = () => {
+        return fetch(`${this._url}`, {
             method: 'GET',
             headers: this._headers,
-            credentials: 'include'
         }).then(this._getResponseData);
     }
 
-    getSavedMovies = () => {
-        return fetch(`${this._url}/movies`, {
-            method: 'GET',
+    /*savedOrRemoveMovie = (data, isSaved) => {
+        return fetch(`${this._url}/${data}`, {
+            method: `${!isSaved ? 'DELETE' : 'PUT'}`,
             headers: this._headers,
-            credentials: 'include'
         }).then(this._getResponseData);
-    }
+    }*/
 
     saveMovie = (data) => {
-        return fetch(`${this._url}/movies`, {
+        return fetch(`${this._url}`, {
             method: 'POST',
             headers: this._headers,
-            credentials: 'include',
             body: JSON.stringify(data)
         }).then(this._getResponseData);
     }
 
     deleteMovie = (data) => {
-        return fetch(`${this._url}/movies/${data.movieId}`, {
+        return fetch(`${this._url}/${data}`, {
             method: 'DELETE',
             headers: this._headers,
-            credentials: 'include'
         }).then(this._getResponseData);
     }
-}
+} 
 
 const mainApi = new MainApi({
-    url: 'https://moviesexplorerdiploma.nomoredomains.sbs/api',
+    url: 'https://moviesexplorerdiploma.nomoredomains.sbs/api/movies',
     headers: {
       "Content-Type": "application/json",
+      'Authorization': `Bearer ${token}`,
     }
 });
 
