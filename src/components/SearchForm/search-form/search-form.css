@@ -1,5 +1,5 @@
 .search-form {
-    max-width: 1140px;
+    width: 1140px;
     margin: 70px auto;
     height: 72px;
     background: #F9F9F9;
@@ -23,18 +23,22 @@
 
 @media (max-width: 1280px) {
     .search-form {
+        width: calc(100% - 140px);
+        max-width: 1140px;
         margin: 70px;
     }
 }
 
 @media (max-width: 768px) {
     .search-form {
+        width: calc(100% - 60px);
         margin: 80px 30px 109px;
     }
 }
 
 @media (max-width: 630px) {
     .search-form {
+        width: calc(100% - 20px);
         margin: 80px 10px 46px;
         flex-direction: column;
         position: relative;

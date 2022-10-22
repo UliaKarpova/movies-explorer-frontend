@@ -4,33 +4,36 @@ import { useState } from 'react';
 import './Register.css';
 import SignHeader from '../SignHeader/SignHeader';
 import SignForm from '../SignForm/SignForm';
+import FormWithValidation from '../FormWithValidation/FormWithValidation';
 
 function Register({ onSubmit }) {
-  const [values, setValues] = useState({});
+    const { errors, handleChange } = FormWithValidation();
 
-  const handleChange = (e) => {
-      const { name, value } = e.target;
-      setValues({...values,
-          [name]: value,
-      })
-      console.log(values);
-  }
+    return (
+        <>
+            <SignHeader title='Добро пожаловать!' />
 
-  function handleSubmit(e) {
-      e.preventDefault();
-      onSubmit(values);
-    }
+            <SignForm onSubmit={onSubmit}
+            submitText='Зарегистрироваться'
+            redirectText='Уже зарегистрированы? '
+            redirectRoute='/signin'
+            linkText='Войти'>
+                <label htmlFor='name'
+                className='form__label'>Имя</label>
 
-  return (
-    <>
-        <SignHeader title='Добро пожаловать!' />
-        <SignForm onSubmit={handleSubmit} onChange={handleChange} submitText='Зарегистрироваться' redirectText='Уже зарегистрированы? ' redirectRoute='/signin' linkText='Войти'>
-            <label htmlFor='name' className='form__label'>Имя</label>
-            <input type='text' id='name' name='name' onChange={handleChange} defaultValue='Usrename' className='form__input' />
-            <span className='form__error'>Что-то пошло не так...</span>
-        </SignForm>
-    </>
-  );
+                <input type='text'
+                id='name'
+                name='name'
+                minLength='2'
+                maxLength='30'
+                onChange={handleChange} 
+                className={`form__input ${errors.name === undefined ? '' : 
+                    errors.name === '' ? 'correct' : 'uncorrect'}`} />
+
+                <span className='form__error'>{errors.name || ''}</span>
+            </SignForm>
+        </>
+    );
 }
 
 export default Register;

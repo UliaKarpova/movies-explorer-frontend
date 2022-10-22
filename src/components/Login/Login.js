@@ -5,7 +5,7 @@ import SignHeader from '../SignHeader/SignHeader';
 import SignForm from '../SignForm/SignForm';
 
 function Login({ onSubmit }) {
-  const [values, setValues] = useState({});
+  /*const [values, setValues] = useState({});
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -17,14 +17,13 @@ function Login({ onSubmit }) {
   function handleSubmit(event) {
     event.preventDefault();
     onSubmit(values);
-  }
+  }*/
 
 
   return (
     <>
       <SignHeader title='Рады видеть!' />
-      <SignForm onSubmit={handleSubmit} 
-        onChange={handleChange} 
+      <SignForm onSubmit={onSubmit} 
         submitText='Войти' 
         redirectText='Ещё не зарегистрированы? ' 
         redirectRoute='/signup' 

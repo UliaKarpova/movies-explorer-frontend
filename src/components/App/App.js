@@ -11,6 +11,7 @@ import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import NotFound from '../NotFound/NotFound';
+import { searchError, searchErrorMovieNotFound } from '../../utils/searchErrors';
 
 import * as authApi from '../../utils/AuthApi'; 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
@@ -29,34 +30,68 @@ function App() {
 	const [findingValue, setFindingValue] = useState('');
 	const [findedMovies, setFindedMovies] = useState([]);
 	const [isSavedMovieShort, setIsSavedMovieShort] = useState(false);
+	const [moviesAmount, setMoviesAmount] = useState();
+	const [addMoviesAmount, setAddMoviesAmount] = useState();
+	const [errorMessage, setErrorMessage] = useState('');
 
 	const [savedMovies, setSavedMovies] = useState([]);
+	const [displayWidth, setDisplayWidth] = useState(document.documentElement.scrollWidth);
 
   	useEffect(() => {
 		if (loggedIn) {
 		const token = localStorage.getItem('token');
-			mainApi.getSavedMovies(token)
-				.then((movies) => {
-					if (movies) {
-						console.log(movies.movies);
-					setSavedMovies(movies.movies);
-					console.log(savedMovies);
-				}
-				console.log(savedMovies);
-				}).catch((err) => console.log(err));
-		}
+		getSavedMovies(token);
 		const movies = JSON.parse(localStorage.getItem('findedMovies'));
 		setFindedMovies(movies);
 		const toggle = localStorage.getItem('short');
 		setIsMovieShort(Boolean(toggle));
 		const value = localStorage.getItem('findingValue');
-		setFindingValue(value);	
-	}, [loggedIn, history]) 
-  
+		setFindingValue(value);
+		}
+	}, [loggedIn, history])
+
+	useEffect(() => {
+		window.addEventListener('resize', listenerCallback);
+
+		return () => {
+			window.removeEventListener('resize', listenerCallback);
+		}
+	}, [])
 
 	useEffect(() => {
 		tokenCheck();
 	}, [])
+
+	let resizeDisplay;
+
+	function listenerCallback() {
+		clearTimeout(resizeDisplay);
+		resizeDisplay = setTimeout(resizedEnded, 500);
+};
+
+	function resizedEnded() {
+		const width = window.innerWidth;
+		setDisplayWidth(width);
+		if (displayWidth > 900) {
+			setMoviesAmount(12);
+			setAddMoviesAmount(3);
+		} else if (displayWidth > 550) {
+			setMoviesAmount(8);
+			setAddMoviesAmount(2);
+		} else {
+			setMoviesAmount(5);
+			setAddMoviesAmount(2);
+		}
+	}
+
+	function getSavedMovies(userToken) {
+		mainApi.getSavedMovies(userToken)
+			.then((movies) => {
+				if (movies) {
+					setSavedMovies(movies.movies);
+				}
+			}).catch((err) => console.log(err));
+	}
 
 	function handleCheckboxClick() {
 		setIsMovieShort(!isMovieShort);
@@ -74,17 +109,21 @@ function App() {
 			.then((newMovie) => {
 				console.log(newMovie);
 				setSavedMovies([newMovie.movie, ...savedMovies]);
+				console.log(savedMovies);
 			}).catch((err) => console.log(err))
 		}
 	}
 
 	function removeSavedMovie(movie) {
+		console.log(movie);
 		mainApi.deleteMovie(movie._id)
 		.then((res) => {
 			console.log(res);
 			const newList = savedMovies.filter((item) => {
-				return !(item._id === res.movie._id);
+				return !(item._id === movie._id);
 			})
+			console.log(newList);
+
 			setSavedMovies(newList);
 		}).catch((err) => console.log(err));
 	}
@@ -144,73 +183,84 @@ function App() {
 		setSavedMovies([]);
 		setFindedMovies([]);
 		setFindingValue('');
-		/*setIsMovieShort(false);
+		setIsMovieShort(false);
 		localStorage.removeItem('short');
 		localStorage.removeItem('findingValue');
-		localStorage.removeItem('findedMovies');*/
+		localStorage.removeItem('findedMovies');
 		localStorage.removeItem('token');
 		/* setIsUserRegistred(false); */
 	}
 
 	function findMovies(value) {
+		setErrorMessage('');
 		setFindedMovies([]);
 		setPreloaderStarts(true);
 		setFindingValue(value);
-		console.log(isMovieShort);
 		localStorage.setItem('short', isMovieShort);
 		localStorage.setItem('findingValue', value);
 		api.getMovies()
 			.then((res) => {
+				console.log(res);
 				const results = findByValue(value, res);
+				if (results) {
 				const filtredMovies = moviesFilter(results);
+				setFindedMovies(filtredMovies);
 				if (isMovieShort) {
-					console.log(isMovieShort);
 					const shortMovies = filtredMovies.filter(function (item) {
 						return item.duration <= 40;
 					})
-					console.log(shortMovies);
 					setFindedMovies(shortMovies);
 				} else {
 					setFindedMovies(filtredMovies);
 				}
+			}
 				setPreloaderStarts(false);
 				localStorage.setItem('findedMovies', JSON.stringify(findedMovies));
-			}).catch((err) => console.log(err));    
+			}).catch((err) => setErrorMessage(searchError));
 	}
 
 
 	function findSavedMovies(value) {
         const results = findByValue(value, savedMovies);
-		setSavedMovies(results);
+		if (results) {
+			setSavedMovies(results);
+		}
 	}
 
-		function moviesFilter(data) {
-			data.forEach((item) => {
-				if (savedMovies.some((movie) => movie.movieId === item.id)) {
-					item.isSaved = true;
-					return item;
-				} else {
-					item.isSaved = false;
-					return item;
-				}
+	function moviesFilter(data) {
+		data.forEach((item) => {
+			if (savedMovies.some((movie) => movie.movieId === item.id)) {
+				item.isSaved = true;
+				return item;
+			} else {
+				item.isSaved = false;
+				return item;
+			}
 			})
-			return data;
-		}
+		return data;
+	}
 
-		function findByValue(value, data) {
-			const results = data.filter(function (item) {
-				return item.nameRU.toLowerCase().includes(value.toLowerCase()) || item.nameEN.toLowerCase().includes(value.toLowerCase());
-			});
+	function findByValue(value, data) {
+	   const results = data.filter(function (item) {
+			return item.nameRU.toLowerCase().includes(value.toLowerCase()) || item.nameEN.toLowerCase().includes(value.toLowerCase());
+		});
+ 		if (results.length === 0) {
+			setErrorMessage(searchErrorMovieNotFound);
+			return;
+		} else {
 			return results;
 		}
-console.log(savedMovies);
+	}
 
   	return (
 		<div className='App'>
 			<CurrentUserContext.Provider value={currentUser}>
 			<Switch>
 				<ProtectedRoute path='/movies' loggedIn={loggedIn}>
-					<Movies isMovieShort={isMovieShort} 
+					<Movies isMovieShort={isMovieShort}
+					searchError={errorMessage}
+					moviesAmount={moviesAmount}
+					addMoviesAmount={addMoviesAmount}
 					clickOnIcon={handleSavedOrRemoveMovie} 
 					onClick={handleCheckboxClick} 
 					movies={findedMovies} 
@@ -220,7 +270,7 @@ console.log(savedMovies);
 				</ProtectedRoute>
 
 				<ProtectedRoute path='/saved-movies' loggedIn={loggedIn}>
-					<SavedMovies 
+					<SavedMovies
 					isMovieShort={isSavedMovieShort} 
 					clickOnIcon={removeSavedMovie} 
 					onClick={handleSavedMovieCheckboxClick} 

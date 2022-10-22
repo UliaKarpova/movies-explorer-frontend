@@ -51,21 +51,21 @@ function MoviesCard({ movie, clickOn, isSavedRoute }) {
     const buttonClass = `card__button ${ !isSavedRoute ? `${movie.isSaved ? 'active' : ''}` : 'card__button_type_saved'} `;
 
   return (
-    <>
-        <div className='card__info'>
+    <div className='card'>
+        <button className={buttonClass}
+        type='button'
+        onClick={buttonClick} />
+
+        <a className='card__link' href={movie.trailerLink}  rel='noopener noreferrer' target='_blank'>
             <h2 className='card__title'>{isSavedRoute ? movie.nameRU : newMovie.nameRU}</h2>
 
             <p className='card__duration'>{newDuration}</p>
 
-            <button className={buttonClass}
-            type='button'
-            onClick={buttonClick} />
-        </div>
-
-        <img className='card__img' 
-        src={isSavedRoute ? movie.image : newMovie.image} 
-        alt='Постер' />
-    </>
+            <img className='card__img' 
+            src={isSavedRoute ? movie.image : newMovie.image} 
+            alt='Постер' />
+        </a>
+    </div>
   );
 }
 

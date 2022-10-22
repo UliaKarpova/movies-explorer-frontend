@@ -1,0 +1,10 @@
+.search-error {
+    max-width: 700px;
+    font-size: 35px;
+    font-weight: 500;
+    line-height: 50px;
+    letter-spacing: 0em;
+    text-align: center;
+    margin: 70px auto;
+    color: #EE3465;
+}
