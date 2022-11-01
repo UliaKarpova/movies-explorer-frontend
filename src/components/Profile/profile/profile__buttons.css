@@ -1,20 +1,22 @@
 .profile__buttons {
-    margin: 0 auto;
-    width: 200px;
     position: fixed;
-    bottom: 70px;
-    left: 50%;
-    margin-left: -100px;
+    bottom: 0;
+    width: 100%;
+    max-width: 396px;
+    margin: 0 auto;
+    margin-bottom: 70px;
 }
+
 
 @media (max-width: 768px) {
     .profile__buttons {
-        bottom: 269px;
+        margin-bottom: 269px;
     }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
     .profile__buttons {
-        bottom: 40px;
+        max-width: 260px;
+        margin-bottom: 40px;
     }
 }

@@ -15,7 +15,6 @@ function MoviesCard({ movie, clickOn, isSavedRoute }) {
         movieId: movie.id,
         nameRU: movie.nameRU || '',
         nameEN: movie.nameEN || '',
-        _id: movie._id,
         }
 
     function getDuration() {
@@ -30,21 +29,28 @@ function MoviesCard({ movie, clickOn, isSavedRoute }) {
     }
 
     function buttonToggle(event) {
+        movie.isSaved = !movie.isSaved;
         event.target.classList.toggle('active');
     }
 
-    function movieRemove(event) {
+    /*function movieRemove(event) {
         event.currentTarget.closest('.movies__card').remove();
-    }
+    }*/
 
     function buttonClick(event) {
         if(isSavedRoute) {
-            movieRemove(event);
+            clickOn(movie);
+        } else {
+            clickOn(movie, newMovie, buttonToggle);
+        }
+           /* movieRemove(event);
         } else {
             buttonToggle(event);
+            const movie = event.currentTarget;
+            console.log(movie, newMovie);
+            clickOn(movie, newMovie);
         }
-        console.log(newMovie);
-        clickOn(newMovie);
+*/
     }
 
     const newDuration = getDuration();

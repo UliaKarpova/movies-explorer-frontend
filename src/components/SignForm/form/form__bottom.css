@@ -1,0 +1,11 @@
+.form__bottom {
+    width: 100%;
+    max-width: 396px;
+    margin: auto auto 0;
+}
+
+@media (max-width: 600px) {
+    .form__bottom {
+        max-width: 260px;
+    }
+}

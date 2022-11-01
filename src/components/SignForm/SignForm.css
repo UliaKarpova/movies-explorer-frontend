@@ -1,6 +1,7 @@
 @import url(./form/form.css);
 @import url(./form/form__label.css);
 @import url(./form/form__input.css);
+@import url(./form/form__bottom.css);
 @import url(./form/form__error.css);
 @import url(./form/form__submit.css);
 @import url(./form/form__redirect.css);

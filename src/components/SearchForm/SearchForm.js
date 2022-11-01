@@ -5,7 +5,6 @@ import './SearchForm.css';
 
 function SearchForm({ onClick, findMovies, defaultValue, isMovieShort }) {
     const [value, setValue] = useState('');
-
     function getValue(event) {
         const data = event.target.value;
         setValue(data);
@@ -13,16 +12,17 @@ function SearchForm({ onClick, findMovies, defaultValue, isMovieShort }) {
 
     function find(event) {
         event.preventDefault();
-        findMovies(value);
+        findMovies(value || defaultValue);
     };
 
     return (
         <form className='search-form'
+        noValidate
         onSubmit={find}>
             <input type='search' 
             onChange={getValue}
             className='search-form__input'
-            defaultValue={defaultValue || ''}
+            defaultValue={defaultValue || value}
             placeholder='Фильм'
             required />
 

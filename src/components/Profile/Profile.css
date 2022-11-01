@@ -5,6 +5,7 @@
 @import url(./profile/profile__row.css);
 @import url(./profile/profile__label.css);
 @import url(./profile/profile__input.css);
+@import url(./profile/profile__error.css);
 @import url(./profile/profile__line.css);
 @import url(./profile/profile__save.css);
 @import url(./profile/profile__logout.css);

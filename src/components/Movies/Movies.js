@@ -11,7 +11,6 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 
 function Movies({ searchError, clickOnIcon, onClick, movies, findMovies, defaultValue, isMovieShort, preloaderStarts, moviesAmount, addMoviesAmount }) {
-
     const route = 'movies';
     /*let newMoviesAmount = moviesAmount;
     let newMovies = movies.slice(0, newMoviesAmount);
@@ -67,17 +66,16 @@ function Movies({ searchError, clickOnIcon, onClick, movies, findMovies, default
                 defaultValue={defaultValue} 
                 isMovieShort={isMovieShort} />
 
-
-                {/*{preloaderStarts ? ( <Preloader /> ) :
-                movies.length > 0 ? 
+                {!movies ? '' :
+                    preloaderStarts ? ( <Preloader /> ) :
+                    movies.length > 0 ? 
                     (<MoviesCardList clickOn={clickOnIcon} 
                     movies={movies} 
                     route={route}>
-                        <button onClick={addMovies} type='button' 
-                        className='movies__button'>Ещё</button>
+                        {/*<button onClick={addMovies} type='button' 
+                        className='movies__button'>Ещё</button>*/}
                     </MoviesCardList>) : (<p className='search-error'>{searchError}</p>)
                 }
-                */}
             </main>
             
             <Footer />

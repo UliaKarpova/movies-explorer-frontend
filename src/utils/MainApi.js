@@ -20,13 +20,6 @@ class MainApi {
         }).then(this._getResponseData);
     }
 
-    /*savedOrRemoveMovie = (data, isSaved) => {
-        return fetch(`${this._url}/${data}`, {
-            method: `${!isSaved ? 'DELETE' : 'PUT'}`,
-            headers: this._headers,
-        }).then(this._getResponseData);
-    }*/
-
     saveMovie = (data) => {
         return fetch(`${this._url}`, {
             method: 'POST',
@@ -36,6 +29,7 @@ class MainApi {
     }
 
     deleteMovie = (data) => {
+        console.log(data);
         return fetch(`${this._url}/${data}`, {
             method: 'DELETE',
             headers: this._headers,

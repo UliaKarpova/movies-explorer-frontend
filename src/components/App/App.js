@@ -11,7 +11,7 @@ import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import NotFound from '../NotFound/NotFound';
-import { searchError, searchErrorMovieNotFound } from '../../utils/searchErrors';
+import { searchError, searchErrorMovieNotFound, searchNoValues } from '../../utils/messages_errors';
 
 import * as authApi from '../../utils/AuthApi'; 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
@@ -25,30 +25,44 @@ function App() {
 	const [loggedIn, setLoggedIn] = useState(false);
 
 	const [preloaderStarts, setPreloaderStarts] = useState(false);
-	/* const [isUserRegistred, setIsUserRegistred] = useState(false); */
+
+	const [allMovies, setAllMovies] = useState([]);
+
 	const [isMovieShort, setIsMovieShort] = useState(false);
 	const [findingValue, setFindingValue] = useState('');
 	const [findedMovies, setFindedMovies] = useState([]);
+
 	const [isSavedMovieShort, setIsSavedMovieShort] = useState(false);
 	const [moviesAmount, setMoviesAmount] = useState();
 	const [addMoviesAmount, setAddMoviesAmount] = useState();
+
 	const [errorMessage, setErrorMessage] = useState('');
+	const [apiError, setApiError] = useState('');
 
 	const [savedMovies, setSavedMovies] = useState([]);
+
 	const [displayWidth, setDisplayWidth] = useState(document.documentElement.scrollWidth);
 
   	useEffect(() => {
 		if (loggedIn) {
-		const token = localStorage.getItem('token');
-		getSavedMovies(token);
-		const movies = JSON.parse(localStorage.getItem('findedMovies'));
-		setFindedMovies(movies);
-		const toggle = localStorage.getItem('short');
-		setIsMovieShort(Boolean(toggle));
-		const value = localStorage.getItem('findingValue');
-		setFindingValue(value);
+			const token = localStorage.getItem('token');
+			getSavedMovies(token);
+			const movies = JSON.parse(localStorage.getItem('findedMovies'));
+			setFindedMovies(movies);
+			const toggle = JSON.parse(localStorage.getItem('short'));
+			setIsMovieShort(Boolean(toggle));
+			const value = localStorage.getItem('findingValue');
+			setFindingValue(value);
 		}
 	}, [loggedIn, history])
+
+
+	console.log(localStorage.getItem('short'));
+	console.log(isMovieShort);
+	console.log(findedMovies);
+	console.log(findingValue);
+	console.log(savedMovies);
+
 
 	useEffect(() => {
 		window.addEventListener('resize', listenerCallback);
@@ -69,6 +83,10 @@ function App() {
 		resizeDisplay = setTimeout(resizedEnded, 500);
 };
 
+	function resetApiError() {
+		setApiError('');
+	}
+
 	function resizedEnded() {
 		const width = window.innerWidth;
 		setDisplayWidth(width);
@@ -84,13 +102,14 @@ function App() {
 		}
 	}
 
+
 	function getSavedMovies(userToken) {
 		mainApi.getSavedMovies(userToken)
 			.then((movies) => {
 				if (movies) {
 					setSavedMovies(movies.movies);
 				}
-			}).catch((err) => console.log(err));
+			}).catch((err) => setApiError(err.message));
 	}
 
 	function handleCheckboxClick() {
@@ -101,80 +120,107 @@ function App() {
 		setIsSavedMovieShort(!isSavedMovieShort);
 	}
 
-	function saveMovie(movie) {
-		if (savedMovies.some((item) => item.movieId === movie.id)) {
-			return;
-		} else {
-			mainApi.saveMovie(movie)
-			.then((newMovie) => {
-				console.log(newMovie);
-				setSavedMovies([newMovie.movie, ...savedMovies]);
-				console.log(savedMovies);
-			}).catch((err) => console.log(err))
-		}
+	function saveMovie(newMovie, buttonToggle) {
+		mainApi.saveMovie(newMovie)
+		.then((res) => {
+			setSavedMovies([res.movie, ...savedMovies]);
+			buttonToggle();
+		}).catch((err) => setApiError(err.message))
 	}
 
-	function removeSavedMovie(movie) {
-		console.log(movie);
+	function removeSavedMovie(movie, buttonToggle) {
+		console.log(movie._id);
 		mainApi.deleteMovie(movie._id)
 		.then((res) => {
-			console.log(res);
 			const newList = savedMovies.filter((item) => {
 				return !(item._id === movie._id);
 			})
-			console.log(newList);
-
 			setSavedMovies(newList);
-		}).catch((err) => console.log(err));
+			if (buttonToggle) {
+				buttonToggle();
+			} else {
+				const newFindedMovies = findedMovies.map((item) => {
+					if (item.id === movie.movieId) {
+						item.isSaved = false;
+						return item;
+					} else {
+						return item;
+					}
+				})
+				setFindedMovies(newFindedMovies);				
+				localStorage.setItem('findedMovies', JSON.stringify(findedMovies));
+			}
+		}).catch((err) => setApiError(err.message));
 	}
 
 
-	function handleSavedOrRemoveMovie(movie) {
+	function handleSavedOrRemoveMovie(movie, newMovie, buttonToggle) {
 		console.log(movie);
+		console.log(newMovie);
+
 		if (movie.isSaved) {
-			removeSavedMovie(movie);
+			const movieForDelete = savedMovies.find((item) => item.movieId === movie.id);
+			console.log(movieForDelete);
+			removeSavedMovie(movieForDelete, buttonToggle);
 		} else {
-			saveMovie(movie);
+			console.log(newMovie);
+			saveMovie(newMovie, buttonToggle);
 		}
+	}
+
+	function getUserInfo(token) {
+		authApi.getUserInfo(token)
+			.then((res) => {
+			if (res) {
+				setCurrentUser({
+					name: res.name,
+					id: res._id,
+					email: res.email,
+					});
+				setLoggedIn(true);
+				history.push('/movies');
+			}
+			}).catch((err) => setApiError(err));
 	}
 
 	function tokenCheck() {
 		const jwt = localStorage.getItem('token');
 
 		if (jwt) {
-			authApi.getUserInfo(jwt)
-				.then((res) => {
-				if (res) {
-					setCurrentUser({
-						name: res.name,
-						id: res._id,
-						email: res.email,
-						});
-					setLoggedIn(true);
-					history.push('/movies');
-				}
-				}).catch((err) => console.log(err));
+			getUserInfo(jwt);
 		};
 	}
 
-	function handleRegisterSubmit(data) {
+	function handleRegisterSubmit(data, resetForm) {
+		setPreloaderStarts(true);
 		authApi.register(data)
 			.then((res) => {
 				if (res) {
-					history.push('/signin');
+					handleLoginSubmit(res, resetForm);
 				}
-			}).catch((err) => console.log(err));
+			}).catch((err) => {
+				setPreloaderStarts(false);
+				setApiError(err)
+			});
 	}
 
-	function handleLoginSubmit(data) {
-		authApi.auth(data)
+	function handleLoginSubmit(data, resetForm) {
+		setPreloaderStarts(true);
+		const { email, password } = data;
+		authApi.auth({ email, password })
 			.then((res) => {
 				if (res.token) {
+					localStorage.setItem('token', res.token);
 					setLoggedIn(true);
-					setCurrentUser(data);
-					history.push('/movies');
+					setApiError('');
+					resetForm();
+					setPreloaderStarts(false);
+					getUserInfo(res.token);
 				}
-			}).catch((err) => console.log(err));
+			}).catch((err) => {
+				setPreloaderStarts(false);
+				setApiError(err);
+			});
 	}
 
 	function logout() {
@@ -188,37 +234,75 @@ function App() {
 		localStorage.removeItem('findingValue');
 		localStorage.removeItem('findedMovies');
 		localStorage.removeItem('token');
-		/* setIsUserRegistred(false); */
+	}
+
+	function changeUserInfo(data) {
+		const jwt = localStorage.getItem('token');
+		setPreloaderStarts(true);
+		const newInfo = { 
+			name: data.name || currentUser.name,
+			email: data.email || currentUser.email,
+		}
+
+		authApi.patchtUserInfo(jwt, newInfo)
+			.then((res) => {
+				setCurrentUser(res);
+				setPreloaderStarts(false);
+			}).catch((err) => {
+				setPreloaderStarts(false);
+				setApiError(err);
+			});
+	}
+
+
+	
+
+	function getMovies(value) {
+		api.getMovies()
+			.then((res) => {
+				setErrorMessage('');
+				setAllMovies(res);
+				getFindedMovies(value, res);
+			}).catch((err) => {
+				setErrorMessage(searchError)});
+	}
+
+	function getFindedMovies(value, movies) {
+		const result = findByValue(value, movies);
+		
+		const filtredMovies = moviesFilter(result);
+		if (isMovieShort) {
+			const shortMovies = filtredMovies.filter(function (item) {
+				return item.duration <= 40;
+			})
+			setFindedMovies(shortMovies);
+			localStorage.setItem('findedMovies', JSON.stringify(shortMovies));
+		} else {
+			setFindedMovies(filtredMovies);
+			localStorage.setItem('findedMovies', JSON.stringify(filtredMovies));
+
+		}
+		setPreloaderStarts(false);
 	}
 
 	function findMovies(value) {
-		setErrorMessage('');
-		setFindedMovies([]);
-		setPreloaderStarts(true);
-		setFindingValue(value);
-		localStorage.setItem('short', isMovieShort);
-		localStorage.setItem('findingValue', value);
-		api.getMovies()
-			.then((res) => {
-				console.log(res);
-				const results = findByValue(value, res);
-				if (results) {
-				const filtredMovies = moviesFilter(results);
-				setFindedMovies(filtredMovies);
-				if (isMovieShort) {
-					const shortMovies = filtredMovies.filter(function (item) {
-						return item.duration <= 40;
-					})
-					setFindedMovies(shortMovies);
-				} else {
-					setFindedMovies(filtredMovies);
-				}
-			}
-				setPreloaderStarts(false);
-				localStorage.setItem('findedMovies', JSON.stringify(findedMovies));
-			}).catch((err) => setErrorMessage(searchError));
-	}
+		if (!value) {
+			setFindedMovies([]);
+			return setErrorMessage(searchNoValues);
+		} else {
+			console.log(isMovieShort);
+			localStorage.setItem('short', JSON.stringify(isMovieShort));
+			localStorage.setItem('findingValue', value);
+			setPreloaderStarts(true);
+			console.log(localStorage.getItem('short'));
 
+			if (allMovies.length === 0) {
+				getMovies(value);
+			} else {
+				getFindedMovies(value, allMovies);
+			}
+		}	
+	}
 
 	function findSavedMovies(value) {
         const results = findByValue(value, savedMovies);
@@ -280,7 +364,11 @@ function App() {
 				</ProtectedRoute>
 
 				<ProtectedRoute path='/profile' loggedIn={loggedIn}>
-					<Profile logout={logout} />
+					<Profile logout={logout}
+					resetApiError={resetApiError}
+					apiError={apiError}
+					preloaderStarts={preloaderStarts}
+					changeUserInfo={changeUserInfo} />
 				</ProtectedRoute>
 				
 				<Route exact path='/'>
@@ -288,11 +376,18 @@ function App() {
 				</Route>
 			
 				<ProtectedSignRoute path='/signup'>
-					<Register onSubmit={handleRegisterSubmit} />
+					<Register onSubmit={handleRegisterSubmit}
+					resetApiError={resetApiError}
+					apiError={apiError}
+					preloaderStarts={preloaderStarts} />
 				</ProtectedSignRoute>
 
 				<ProtectedSignRoute path='/signin'>
-					<Login onSubmit={handleLoginSubmit} />
+					<Login onSubmit={handleLoginSubmit}
+					resetApiError={resetApiError}
+					apiError={apiError}
+					preloaderStarts={preloaderStarts} />
+
 				</ProtectedSignRoute>
 
 				<Route>
