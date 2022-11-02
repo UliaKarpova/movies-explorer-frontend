@@ -8,3 +8,10 @@
     margin: 70px auto;
     color: #EE3465;
 }
+
+
+.search-error_under-search {
+    margin: -50px auto 0;
+    font-size: 30px;
+    height: 50px;
+}

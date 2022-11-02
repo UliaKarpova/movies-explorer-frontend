@@ -8,12 +8,11 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 import Preloader from '../Preloader/Preloader';
 
-function SavedMovies({ onClick, isMovieShort, clickOnIcon, movies, findMovies, preloaderStarts }) {
+function SavedMovies({ onClick, isMovieShort, clickOnIcon, movies, findMovies, preloaderStarts, findedSavedMovies, searchError }) {
     const route = 'saved-movies';
-    console.log(movies);
 
     return (
-        <>
+        <div className='movies-page'>
             <Header>
                 <nav className='header__nav'>
                     <Link to='/movies' 
@@ -29,21 +28,23 @@ function SavedMovies({ onClick, isMovieShort, clickOnIcon, movies, findMovies, p
                 <BurgerMenu route={route} />
             </Header>
 
-            <main>
+            <main className='movies-main'>
                 <SearchForm onClick={onClick} 
                 findMovies={findMovies}
                 isMovieShort={isMovieShort}/>
 
-                {preloaderStarts ? ( <Preloader /> ) : 
-                (
-                    <MoviesCardList clickOn={clickOnIcon} 
-                    movies={movies} 
+                <p className='search-error search-error_under-search'>{searchError || ''}</p>
+
+                {!movies && !findedSavedMovies ? '' :
+                preloaderStarts ? ( <Preloader /> ) :
+                ( <MoviesCardList clickOn={clickOnIcon} 
+                    movies={findedSavedMovies.length === 0 ? movies : findedSavedMovies} 
                     route={route} />
                 )}
             </main>
 
             <Footer />
-        </>
+        </div>
     );
 }
 

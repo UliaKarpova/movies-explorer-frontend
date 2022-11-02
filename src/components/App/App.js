@@ -11,7 +11,7 @@ import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import NotFound from '../NotFound/NotFound';
-import { searchError, searchErrorMovieNotFound, searchNoValues } from '../../utils/messages_errors';
+import { noSavedMovies, searchError, searchErrorMovieNotFound, searchNoValues } from '../../utils/messages_errors';
 
 import * as authApi from '../../utils/AuthApi'; 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
@@ -32,14 +32,16 @@ function App() {
 	const [findingValue, setFindingValue] = useState('');
 	const [findedMovies, setFindedMovies] = useState([]);
 
+	const [savedMovies, setSavedMovies] = useState([]);
 	const [isSavedMovieShort, setIsSavedMovieShort] = useState(false);
+	const [findedSavedMovies, setFindedSavedMovies] = useState([]);
+
 	const [moviesAmount, setMoviesAmount] = useState();
 	const [addMoviesAmount, setAddMoviesAmount] = useState();
 
 	const [errorMessage, setErrorMessage] = useState('');
 	const [apiError, setApiError] = useState('');
 
-	const [savedMovies, setSavedMovies] = useState([]);
 
 	const [displayWidth, setDisplayWidth] = useState(document.documentElement.scrollWidth);
 
@@ -57,11 +59,9 @@ function App() {
 	}, [loggedIn, history])
 
 
-	console.log(localStorage.getItem('short'));
-	console.log(isMovieShort);
-	console.log(findedMovies);
-	console.log(findingValue);
 	console.log(savedMovies);
+	console.log(findedSavedMovies);
+	console.log(isSavedMovieShort);
 
 
 	useEffect(() => {
@@ -129,7 +129,6 @@ function App() {
 	}
 
 	function removeSavedMovie(movie, buttonToggle) {
-		console.log(movie._id);
 		mainApi.deleteMovie(movie._id)
 		.then((res) => {
 			const newList = savedMovies.filter((item) => {
@@ -155,15 +154,10 @@ function App() {
 
 
 	function handleSavedOrRemoveMovie(movie, newMovie, buttonToggle) {
-		console.log(movie);
-		console.log(newMovie);
-
 		if (movie.isSaved) {
 			const movieForDelete = savedMovies.find((item) => item.movieId === movie.id);
-			console.log(movieForDelete);
 			removeSavedMovie(movieForDelete, buttonToggle);
 		} else {
-			console.log(newMovie);
 			saveMovie(newMovie, buttonToggle);
 		}
 	}
@@ -269,32 +263,45 @@ function App() {
 
 	function getFindedMovies(value, movies) {
 		const result = findByValue(value, movies);
-		
-		const filtredMovies = moviesFilter(result);
-		if (isMovieShort) {
-			const shortMovies = filtredMovies.filter(function (item) {
+		if (!result) {
+			setFindedMovies([]);
+			setPreloaderStarts(false);
+			return setErrorMessage(searchErrorMovieNotFound);
+		} else {
+			const filtredMovies = moviesFilter(result);
+			if (isMovieShort) {
+				const shortMovies = checkIsMovieShort(filtredMovies);
+				setFindedMovies(shortMovies);
+				localStorage.setItem('findedMovies', JSON.stringify(shortMovies));
+			} else {
+				setFindedMovies(filtredMovies);
+				localStorage.setItem('findedMovies', JSON.stringify(filtredMovies));
+			}
+			setPreloaderStarts(false);
+		}
+	}
+
+	function checkIsMovieShort(movies) {
+			const shortMovies = movies.filter(function (item) {
 				return item.duration <= 40;
 			})
-			setFindedMovies(shortMovies);
-			localStorage.setItem('findedMovies', JSON.stringify(shortMovies));
-		} else {
-			setFindedMovies(filtredMovies);
-			localStorage.setItem('findedMovies', JSON.stringify(filtredMovies));
+			return shortMovies;
+	}
 
-		}
-		setPreloaderStarts(false);
+	function removeDefaultValue() {
+		setFindingValue('');
 	}
 
 	function findMovies(value) {
+		console.log(value);
+		setErrorMessage('');
 		if (!value) {
 			setFindedMovies([]);
 			return setErrorMessage(searchNoValues);
 		} else {
-			console.log(isMovieShort);
 			localStorage.setItem('short', JSON.stringify(isMovieShort));
 			localStorage.setItem('findingValue', value);
 			setPreloaderStarts(true);
-			console.log(localStorage.getItem('short'));
 
 			if (allMovies.length === 0) {
 				getMovies(value);
@@ -305,10 +312,35 @@ function App() {
 	}
 
 	function findSavedMovies(value) {
-        const results = findByValue(value, savedMovies);
-		if (results) {
-			setSavedMovies(results);
+		setErrorMessage('');
+		setFindedSavedMovies([]);
+		console.log(isSavedMovieShort);
+		if (!value) {
+			setFindedSavedMovies([]);
+			return setErrorMessage(searchNoValues);
+		} else {
+			if (savedMovies.length === 0) {
+				return setErrorMessage(noSavedMovies);
+			} else {
+				setPreloaderStarts(true);
+				const results = findByValue(value, savedMovies);
+				if (!results) {
+					setFindedSavedMovies([]);
+					setPreloaderStarts(false);
+					return setErrorMessage(searchErrorMovieNotFound);
+				} else {
+
+				if (isSavedMovieShort) {
+					const shortMovies = checkIsMovieShort(results);
+					setFindedSavedMovies(shortMovies);
+				} else {
+					setFindedSavedMovies(results)
+				}
+			}
 		}
+		}
+		console.log(findedSavedMovies);
+		setPreloaderStarts(false);
 	}
 
 	function moviesFilter(data) {
@@ -342,6 +374,7 @@ function App() {
 			<Switch>
 				<ProtectedRoute path='/movies' loggedIn={loggedIn}>
 					<Movies isMovieShort={isMovieShort}
+					removeDefaultValue={removeDefaultValue}
 					searchError={errorMessage}
 					moviesAmount={moviesAmount}
 					addMoviesAmount={addMoviesAmount}
@@ -354,7 +387,9 @@ function App() {
 				</ProtectedRoute>
 
 				<ProtectedRoute path='/saved-movies' loggedIn={loggedIn}>
-					<SavedMovies
+					<SavedMovies searchError={errorMessage}
+					findedSavedMovies={findedSavedMovies}
+					defaultValue=''
 					isMovieShort={isSavedMovieShort} 
 					clickOnIcon={removeSavedMovie} 
 					onClick={handleSavedMovieCheckboxClick} 

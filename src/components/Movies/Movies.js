@@ -10,7 +10,7 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 
-function Movies({ searchError, clickOnIcon, onClick, movies, findMovies, defaultValue, isMovieShort, preloaderStarts, moviesAmount, addMoviesAmount }) {
+function Movies({ searchError, clickOnIcon, onClick, movies, findMovies, defaultValue, isMovieShort, preloaderStarts, removeDefaultValue, moviesAmount, addMoviesAmount }) {
     const route = 'movies';
     /*let newMoviesAmount = moviesAmount;
     let newMovies = movies.slice(0, newMoviesAmount);
@@ -64,7 +64,8 @@ function Movies({ searchError, clickOnIcon, onClick, movies, findMovies, default
                 <SearchForm onClick={onClick} 
                 findMovies={findMovies}
                 defaultValue={defaultValue} 
-                isMovieShort={isMovieShort} />
+                isMovieShort={isMovieShort}
+                removeDefaultValue={removeDefaultValue} />
 
                 {!movies ? '' :
                     preloaderStarts ? ( <Preloader /> ) :
