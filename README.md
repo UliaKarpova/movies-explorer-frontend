@@ -9,4 +9,5 @@
 CRA, БЭМ, GIT
 
 Ссылка на пул реквест: https://github.com/UliaKarpova/movies-explorer-frontend/pull/2
+
 Ссылка на сайт: https://moviesexplorerdiploma.nomoredomains.icu
