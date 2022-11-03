@@ -16,7 +16,7 @@ function Main({ loggedIn }) {
         <>
             <Header>
                 { loggedIn ? 
-                    ( <nav className='header__nav'>
+                    ( <nav className='header__main-nav'>
                         <Link to='/movies'
                         className='header__to-movies'>Фильмы</Link>
 
