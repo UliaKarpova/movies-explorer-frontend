@@ -17,6 +17,9 @@ function MoviesCard({ movie, clickOn, isSavedRoute }) {
         nameEN: movie.nameEN || '',
         }
 
+    const newDuration = getDuration();
+    const buttonClass = `card__button ${ !isSavedRoute ? `${movie.isSaved ? 'active' : ''}` : 'card__button_type_saved'} `;
+
     function getDuration() {
         if (movie.duration >= 40) {
             const hours = Math.floor(movie.duration/60);
@@ -33,46 +36,34 @@ function MoviesCard({ movie, clickOn, isSavedRoute }) {
         event.target.classList.toggle('active');
     }
 
-    /*function movieRemove(event) {
-        event.currentTarget.closest('.movies__card').remove();
-    }*/
-
-    function buttonClick(event) {
+    function buttonClick() {
         if(isSavedRoute) {
             clickOn(movie);
         } else {
             clickOn(movie, newMovie, buttonToggle);
         }
-           /* movieRemove(event);
-        } else {
-            buttonToggle(event);
-            const movie = event.currentTarget;
-            console.log(movie, newMovie);
-            clickOn(movie, newMovie);
-        }
-*/
     }
 
-    const newDuration = getDuration();
-    const buttonClass = `card__button ${ !isSavedRoute ? `${movie.isSaved ? 'active' : ''}` : 'card__button_type_saved'} `;
+    return (
+        <div className='card'>
+            <button className={buttonClass}
+            type='button'
+            onClick={buttonClick} />
 
-  return (
-    <div className='card'>
-        <button className={buttonClass}
-        type='button'
-        onClick={buttonClick} />
+            <a className='card__link' 
+            href={movie.trailerLink}  
+            rel='noopener noreferrer' 
+            target='_blank'>
+                <h2 className='card__title'>{isSavedRoute ? movie.nameRU : newMovie.nameRU}</h2>
 
-        <a className='card__link' href={movie.trailerLink}  rel='noopener noreferrer' target='_blank'>
-            <h2 className='card__title'>{isSavedRoute ? movie.nameRU : newMovie.nameRU}</h2>
+                <p className='card__duration'>{newDuration}</p>
 
-            <p className='card__duration'>{newDuration}</p>
-
-            <img className='card__img' 
-            src={isSavedRoute ? movie.image : newMovie.image} 
-            alt='Постер' />
-        </a>
-    </div>
-  );
+                <img className='card__img' 
+                src={isSavedRoute ? movie.image : newMovie.image} 
+                alt='Постер' />
+            </a>
+        </div>
+    );
 }
 
 export default MoviesCard;

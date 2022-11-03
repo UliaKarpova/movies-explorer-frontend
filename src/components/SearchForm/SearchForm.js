@@ -5,8 +5,6 @@ import './SearchForm.css';
 
 function SearchForm({ onClick, findMovies, defaultValue, isMovieShort, removeDefaultValue }) {
     const [value, setValue] = useState('');
-    console.log(value);
-    console.log(defaultValue);
 
     function getValue(event) {
         if (removeDefaultValue) {

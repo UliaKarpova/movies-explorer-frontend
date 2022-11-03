@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect } from 'react';
 
 import './Register.css';
+
 import SignHeader from '../SignHeader/SignHeader';
 import SignForm from '../SignForm/SignForm';
 import FormWithValidation from '../FormWithValidation/FormWithValidation';
@@ -31,8 +32,7 @@ function Register({ onSubmit, apiError, resetApiError, preloaderStarts }) {
             values={values}
             apiError={apiError}
             isValid={isValid}
-            resetForm={resetForm}
-            >
+            resetForm={resetForm}>
                 <label htmlFor='name'
                 className='form__label'>Имя</label>
 
@@ -44,7 +44,7 @@ function Register({ onSubmit, apiError, resetApiError, preloaderStarts }) {
                 pattern='^[a-zA-ZА-Яа-яёЁ\s\-]{2,30}$'
                 onChange={onChange} 
                 className={`form__input ${errors.name === undefined ? '' : 
-                    errors.name === '' ? 'correct' : 'uncorrect'}`} />
+                errors.name === '' ? 'correct' : 'uncorrect'}`} />
 
                 <span className='form__error'>{errors.name ? 'Поле должно содержать от 2 до 30 символов (буквы, пробелы и дефисы)' : ''}</span>
 
@@ -56,7 +56,7 @@ function Register({ onSubmit, apiError, resetApiError, preloaderStarts }) {
                 id='email' 
                 onChange={onChange} 
                 className={`form__input ${errors.email === undefined ? '' : 
-                    errors.email === '' ? 'correct' : 'uncorrect'}`}
+                errors.email === '' ? 'correct' : 'uncorrect'}`}
                 required/>
 
                 <span className='form__error'>{errors.email || ''}</span>
@@ -70,18 +70,16 @@ function Register({ onSubmit, apiError, resetApiError, preloaderStarts }) {
                 minLength='8'
                 onChange={onChange} 
                 className={`form__input ${errors.password === undefined ? '' :
-                    errors.password === '' ? 'correct' : 'uncorrect'}`}
+                errors.password === '' ? 'correct' : 'uncorrect'}`}
                 required />
 
                 <span className='form__error'>{errors.password || ''}</span>
 
             </SignForm>
-            { preloaderStarts ? (
-                <div className='preloader__background'>
+            { preloaderStarts ? 
+                (<div className='preloader__background'>
                     <Preloader />
-                </div>
-            ) : ''
-            }
+                </div>) : ''}
         </>
     );
 }

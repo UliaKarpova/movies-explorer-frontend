@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link  } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 import './Movies.css';
 
@@ -10,38 +11,24 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 
-function Movies({ searchError, clickOnIcon, onClick, movies, findMovies, defaultValue, isMovieShort, preloaderStarts, removeDefaultValue, moviesAmount, addMoviesAmount }) {
+function Movies({ searchError, clickOnIcon, onClick, movies, findMovies, defaultValue, 
+    isMovieShort, preloaderStarts, removeDefaultValue, moviesAmount, addMoviesAmount }) {
+
+    const [newMovies, setNewMovies] = useState([]);
+    const [newMoviesAmount, setNewMoviesAmount] = useState(moviesAmount);
+    
     const route = 'movies';
-    /*let newMoviesAmount = moviesAmount;
-    let newMovies = movies.slice(0, newMoviesAmount);
-    let moviesAmount = 12;
-    let addMoviesAmmount = 3;
-    let newMovies = moviesForRendering(moviesAmount);
 
-
-    /*window.addEventListener("resize", function() {
-        if (window.matchMedia("(min-width: 900px)").matches) {
-            moviesAmount = 12;
-            addMoviesAmmount = 3;
-            newMovies = moviesForRendering(moviesAmount);
-        } else if (window.matchMedia("(min-width: 550px)").matches) {
-            moviesAmount = 8;
-            addMoviesAmmount = 2;
-            newMovies = moviesForRendering(moviesAmount);
-        } else {
-            moviesAmount = 5;
-            addMoviesAmmount = 2;
-            newMovies = moviesForRendering(moviesAmount);
+    useEffect(() => {
+        if (movies) {
+        setNewMovies(movies.slice(0, newMoviesAmount));
         }
-    })
-    function moviesForRendering() {
-        return movies.slice(0, moviesAmount);
-    }
+    }, [movies, newMoviesAmount])
 
-    function addMovies () {
-        newMoviesAmount += addMoviesAmount;
-        console.log(newMoviesAmount, newMovies);
-    } */
+    function addMovies() {
+        setNewMoviesAmount(newMoviesAmount + addMoviesAmount);
+        setNewMovies(movies.slice(0, newMoviesAmount));
+    }
 
     return (
         <div className='movies-page'>
@@ -71,12 +58,13 @@ function Movies({ searchError, clickOnIcon, onClick, movies, findMovies, default
                     preloaderStarts ? ( <Preloader /> ) :
                     movies.length > 0 ? 
                     (<MoviesCardList clickOn={clickOnIcon} 
-                    movies={movies} 
+                    movies={newMovies} 
                     route={route}>
-                        {/*<button onClick={addMovies} type='button' 
-                        className='movies__button'>Ещё</button>*/}
-                    </MoviesCardList>) : (<p className='search-error'>{searchError}</p>)
-                }
+                        {movies.length <= newMoviesAmount ? '' :
+                        <button onClick={addMovies} 
+                        type='button' 
+                        className='movies__button'>Ещё</button>}
+                    </MoviesCardList>) : (<p className='search-error'>{searchError}</p>)}
             </main>
             
             <Footer />

@@ -40,8 +40,8 @@ function Login({ onSubmit, apiError, resetApiError, preloaderStarts }) {
                 id='email' 
                 onChange={onChange} 
                 className={`form__input ${errors.email === undefined ? '' : 
-                    errors.email === '' ? 'correct' : 'uncorrect'}`}
-                    required/>
+                errors.email === '' ? 'correct' : 'uncorrect'}`}
+                required/>
 
                 <span className='form__error'>{errors.email || ''}</span>
 
@@ -54,17 +54,15 @@ function Login({ onSubmit, apiError, resetApiError, preloaderStarts }) {
                 minLength='8'
                 onChange={onChange} 
                 className={`form__input ${errors.password === undefined ? '' :
-                    errors.password === '' ? 'correct' : 'uncorrect'}`}
-                    required />
+                errors.password === '' ? 'correct' : 'uncorrect'}`}
+                required />
 
                 <span className='form__error'>{errors.password || ''}</span>
             </SignForm>
-            { preloaderStarts ? (
-                <div className='preloader__background'>
+            { preloaderStarts ? 
+                (<div className='preloader__background'>
                     <Preloader />
-                </div>
-            ) : ''
-            }
+                </div>) : ''}
         </>
     );
 }

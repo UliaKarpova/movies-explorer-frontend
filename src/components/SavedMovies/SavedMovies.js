@@ -8,7 +8,9 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 import Preloader from '../Preloader/Preloader';
 
-function SavedMovies({ onClick, isMovieShort, clickOnIcon, movies, findMovies, preloaderStarts, findedSavedMovies, searchError }) {
+function SavedMovies({ onClick, isMovieShort, clickOnIcon, movies, 
+    findMovies, preloaderStarts, findedSavedMovies, searchError }) {
+    
     const route = 'saved-movies';
 
     return (
