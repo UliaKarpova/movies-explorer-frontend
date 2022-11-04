@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link  } from 'react-router-dom';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
@@ -15,6 +15,10 @@ function Profile({ logout, resetApiError, apiError, changeUserInfo, preloaderSta
     const currentUser = React.useContext(CurrentUserContext);
 
     const { values, handleChange, errors, isValid, resetForm } = FormWithValidation();
+
+    useEffect(() => {
+        resetApiError();
+    }, [])
      
     function onSubmit(event) {
         event.preventDefault();

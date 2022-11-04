@@ -82,7 +82,6 @@ function App() {
 
 	function resizedEnded() {
 		const width = window.innerWidth;
-		console.log(width);
 		if (width > 900) {
 			setMoviesAmount(12);
 			setAddMoviesAmount(3);
@@ -181,11 +180,12 @@ function App() {
 	}
 
 	function handleRegisterSubmit(data, resetForm) {
+		console.log(data);
 		setPreloaderStarts(true);
 		authApi.register(data)
 			.then((res) => {
 				if (res) {
-					handleLoginSubmit(res.data, resetForm);
+					handleLoginSubmit(data, resetForm);
 				}
 			}).catch((err) => {
 				setPreloaderStarts(false);
@@ -199,6 +199,7 @@ function App() {
 		authApi.auth({ email, password })
 			.then((res) => {
 				if (res.token) {
+					console.log(res);
 					localStorage.setItem('token', res.token);
 					setLoggedIn(true);
 					setApiError('');
@@ -262,8 +263,14 @@ function App() {
 			const filtredMovies = moviesFilter(result);
 			if (isMovieShort) {
 				const shortMovies = checkIsMovieShort(filtredMovies);
+				if (shortMovies.length === 0) {
+					setFindedMovies([]);
+					setPreloaderStarts(false);
+					return setErrorMessage(searchErrorMovieNotFound);
+				} else {
 				setFindedMovies(shortMovies);
 				localStorage.setItem('findedMovies', JSON.stringify(shortMovies));
+				}
 			} else {
 				setFindedMovies(filtredMovies);
 				localStorage.setItem('findedMovies', JSON.stringify(filtredMovies));
