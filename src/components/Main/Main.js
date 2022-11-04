@@ -3,6 +3,7 @@ import { Link  } from 'react-router-dom';
 
 import './Main.css';
 
+import BurgerMenu from '../Navigation/BurgerMenu';
 import Header from '../Header/Header';
 import Promo from './Promo/Promo';
 import AboutProject from './AboutProject/AboutProject';
@@ -16,13 +17,20 @@ function Main({ loggedIn }) {
         <>
             <Header>
                 { loggedIn ? 
-                    ( <nav className='header__main-nav'>
-                        <Link to='/movies'
-                        className='header__to-movies'>Фильмы</Link>
+                    (<>
+                        <nav className='header__nav'>
+                            <Link to='/movies'
+                            className='header__to-movies'>Фильмы</Link>
 
-                        <Link to='/saved-movies'
-                        className='header__to-saved-movies'>Сохранённые фильмы</Link>
-                    </nav> ) : 
+                            <Link to='/saved-movies'
+                            className='header__to-saved-movies'>Сохранённые фильмы</Link>
+                        </nav>
+
+                        <Link to='/profile' 
+                        className='header__to-profile'>Аккаунт</Link>
+
+                        <BurgerMenu />
+                </> ) : 
                     ( <nav className='header__signup-signin'>
                         <Link to='/signup' 
                         className='header__to-signup'>Регистрация</Link>
