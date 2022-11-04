@@ -8,5 +8,8 @@
 **Используемые технологии:**
 CRA, БЭМ, GIT
 
+Ссылка на макет: https://disk.yandex.ru/d/tb_C7qF6dw2poQ
+
 Ссылка на пул реквест: https://github.com/UliaKarpova/movies-explorer-frontend/pull/2
+
 Ссылка на сайт: https://moviesexplorerdiploma.nomoredomains.icu
