@@ -53,11 +53,14 @@ function App() {
 				authApi.getUserInfo(token),
 				mainApi.getSavedMovies(token)])
 					.then(([user, userMovies]) => {
+							console.log(user._id);
+							console.log(userMovies.movies);
 						setCurrentUser({
 							name: user.name,
 							id: user._id,
 							email: user.email,
 							});
+					
 						const movies = userMovies.movies.filter((item) => item.owner === user._id);
 						setSavedMovies(movies);
 					}).catch((err) => setApiError(err.message));
@@ -72,6 +75,9 @@ function App() {
 		}
 		}, [loggedIn, history])
 		
+		console.log(savedMovies);
+		console.log(currentUser);
+
 	useEffect(() => {
 		tokenCheck();
 	}, [])
