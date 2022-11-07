@@ -11,8 +11,8 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 
-function Movies({ searchError, clickOnIcon, onClick, movies, findMovies, defaultValue, 
-    isMovieShort, preloaderStarts, removeDefaultValue, moviesAmount, addMoviesAmount }) {
+function Movies({ searchError, saveMovie, removeSavedMovie, onClick, movies, findMovies, defaultValue, 
+    isMovieShort, preloaderStarts, removeDefaultValue, moviesAmount, addMoviesAmount, onChange, savedMovies }) {
 
     const [newMovies, setNewMovies] = useState([]);
     const [newMoviesAmount, setNewMoviesAmount] = useState(moviesAmount);
@@ -48,7 +48,8 @@ function Movies({ searchError, clickOnIcon, onClick, movies, findMovies, default
             </Header>
 
             <main className='movies-main'>
-                <SearchForm onClick={onClick} 
+                <SearchForm onClick={onClick}
+                onChange={onChange}
                 findMovies={findMovies}
                 defaultValue={defaultValue} 
                 isMovieShort={isMovieShort}
@@ -57,7 +58,9 @@ function Movies({ searchError, clickOnIcon, onClick, movies, findMovies, default
                 {!movies ? '' :
                     preloaderStarts ? ( <Preloader /> ) :
                     movies.length > 0 ? 
-                    (<MoviesCardList clickOn={clickOnIcon} 
+                    (<MoviesCardList saveMovie={saveMovie}
+                    removeSavedMovie={removeSavedMovie}
+                    savedMovies={savedMovies}
                     movies={newMovies} 
                     route={route}>
                         {movies.length <= newMoviesAmount ? '' :

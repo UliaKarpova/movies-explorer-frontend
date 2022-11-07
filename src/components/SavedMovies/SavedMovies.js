@@ -8,10 +8,10 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 import Preloader from '../Preloader/Preloader';
 
-function SavedMovies({ onClick, isMovieShort, clickOnIcon, movies, 
-    findMovies, preloaderStarts, findedSavedMovies, searchError }) {
-    
-    const route = 'saved-movies';
+function SavedMovies({ onClick, isMovieShort, removeSavedMovie, movies, 
+    findMovies, preloaderStarts, findedSavedMovies, searchError, onChange }) {
+
+        const route = 'saved-movies';
 
     return (
         <div className='movies-page'>
@@ -33,13 +33,14 @@ function SavedMovies({ onClick, isMovieShort, clickOnIcon, movies,
             <main className='movies-main'>
                 <SearchForm onClick={onClick} 
                 findMovies={findMovies}
-                isMovieShort={isMovieShort}/>
+                isMovieShort={isMovieShort}
+                onChange={onChange} />
 
                 <p className='search-error search-error_under-search'>{searchError || ''}</p>
 
                 {!movies && !findedSavedMovies ? '' :
                 preloaderStarts ? ( <Preloader /> ) :
-                ( <MoviesCardList clickOn={clickOnIcon} 
+                ( <MoviesCardList removeSavedMovie={removeSavedMovie} 
                     movies={findedSavedMovies.length === 0 ? movies : findedSavedMovies} 
                     route={route} />
                 )}

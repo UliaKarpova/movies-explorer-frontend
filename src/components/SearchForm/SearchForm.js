@@ -3,15 +3,13 @@ import { useState } from 'react';
 
 import './SearchForm.css';
 
-function SearchForm({ onClick, findMovies, defaultValue, isMovieShort, removeDefaultValue }) {
+function SearchForm({ onClick, findMovies, defaultValue, isMovieShort, onChange }) {
     const [value, setValue] = useState('');
 
     function getValue(event) {
-        if (removeDefaultValue) {
-            removeDefaultValue();
-        }
         const data = event.target.value;
         setValue(data);
+        onChange();
     };
 
     function find(event) {

@@ -2,7 +2,7 @@ import React from 'react';
 
 import './MoviesCard.css';
 
-function MoviesCard({ movie, clickOn, isSavedRoute }) {
+function MoviesCard({ movie, saveMovie, removeSavedMovie, isSavedRoute, isSaved }) {
     const newMovie = {
         country: movie.country,
         director: movie.director, 
@@ -18,7 +18,7 @@ function MoviesCard({ movie, clickOn, isSavedRoute }) {
         }
 
     const newDuration = getDuration();
-    const buttonClass = `card__button ${ !isSavedRoute ? `${movie.isSaved ? 'active' : ''}` : 'card__button_type_saved'} `;
+    const buttonClass = `card__button ${ !isSavedRoute ? `${isSaved ? 'active' : ''}` : 'card__button_type_saved'} `;
 
     function getDuration() {
         if (movie.duration >= 40) {
@@ -32,15 +32,19 @@ function MoviesCard({ movie, clickOn, isSavedRoute }) {
     }
 
     function buttonToggle(event) {
-        movie.isSaved = !movie.isSaved;
+        /*isSaved = !isSaved;*/
         event.target.classList.toggle('active');
     }
 
     function buttonClick() {
         if(isSavedRoute) {
-            clickOn(movie);
+            removeSavedMovie(movie, buttonToggle);
         } else {
-            clickOn(movie, newMovie, buttonToggle);
+            if (isSaved) {
+                removeSavedMovie(movie, buttonToggle);
+            } else {
+                saveMovie(newMovie, buttonToggle);
+            }
         }
     }
 

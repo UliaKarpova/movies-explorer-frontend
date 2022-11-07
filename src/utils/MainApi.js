@@ -29,7 +29,6 @@ class MainApi {
     }
 
     deleteMovie = (data) => {
-        console.log(data);
         return fetch(`${this._url}/${data}`, {
             method: 'DELETE',
             headers: this._headers,

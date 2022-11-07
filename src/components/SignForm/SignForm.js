@@ -6,7 +6,6 @@ function SignMain({ children, onSubmit, submitText, redirectText, redirectRoute,
 
     function handleSubmit(event) {
         event.preventDefault();
-        console.log(values);
         onSubmit(values, resetForm);
     }
 
