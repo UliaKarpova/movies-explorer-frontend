@@ -1,7 +1,17 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+
+/*import { useHistory, useLocation, useParams } from "react-router";
+// About Page
+const About = () => {
+  const hist = useHistory();
+  const location = useLocation();
+  // Fictive call to Google Analytics
+  // ga.send(["pageview", location.pathname])
+  console.log(location.pathname);*/
+
 
 import './App.css';
 
@@ -19,11 +29,16 @@ import * as authApi from '../../utils/AuthApi';
 
 import { noSavedMovies, searchError, searchErrorMovieNotFound, searchNoValues } from '../../utils/messages_errors';
 
+import { 
+	shortFilmDuration, bigScreenAddMoviesAmount, bigScreenMoviesAmount, 
+	mediumScreenMoviesAmount, smallScreenMoviesAmount, smallerScreenAddMoviesAmount } from '../../utils/const';
+
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import ProtectedSignRoute from '../ProtectedRoute/ProtectedSignRoute';
 
 function App() {
 	const history = useHistory();
+	const location = useLocation();
 	const [currentUser, setCurrentUser] = useState({});
 	const [loggedIn, setLoggedIn] = useState(false);
 
@@ -43,45 +58,26 @@ function App() {
 	const [addMoviesAmount, setAddMoviesAmount] = useState();
 
 	const [errorMessage, setErrorMessage] = useState('');
+	const [savedMoviesErrorMessage, setSavedMoviesErrorMessge] = useState('');
 	const [apiError, setApiError] = useState('');
+
+	const [patchIsDone, setPatchIsDone] = useState(false);
 
   	useEffect(() => {
 		if (loggedIn) {
-			const token = localStorage.getItem('token');
-
-            Promise.all([
-				authApi.getUserInfo(token),
-				mainApi.getSavedMovies(token)])
-					.then(([user, userMovies]) => {
-							console.log(user._id);
-							console.log(userMovies.movies);
-						setCurrentUser({
-							name: user.name,
-							id: user._id,
-							email: user.email,
-							});
-					
-						const movies = userMovies.movies.filter((item) => item.owner === user._id);
-						setSavedMovies(movies);
-					}).catch((err) => setApiError(err.message));
-
-			const movies = JSON.parse(localStorage.getItem('findedMovies'));
+  			const movies = JSON.parse(localStorage.getItem('findedMovies'));
 			setFindedMovies(movies);
 			const toggle = JSON.parse(localStorage.getItem('short'));
 			setIsMovieShort(Boolean(toggle));
 			const value = localStorage.getItem('findingValue');
 			setFindingValue(value);
-			history.push('/movies');
 		}
 		}, [loggedIn, history])
-		
-		console.log(savedMovies);
-		console.log(currentUser);
 
 	useEffect(() => {
 		tokenCheck();
 	}, [])
-	
+
 	useEffect(() => {
 		window.addEventListener('resize', listenerCallback);
 		return () => {
@@ -103,22 +99,48 @@ function App() {
 	function resizedEnded() {
 		const width = window.innerWidth;
 		if (width > 900) {
-			setMoviesAmount(12);
-			setAddMoviesAmount(3);
+			setMoviesAmount(bigScreenMoviesAmount);
+			setAddMoviesAmount(bigScreenAddMoviesAmount);
 		} else if (width > 550) {
-			setMoviesAmount(8);
-			setAddMoviesAmount(2);
+			setMoviesAmount(mediumScreenMoviesAmount);
+			setAddMoviesAmount(smallerScreenAddMoviesAmount);
 		} else {
-			setMoviesAmount(5);
-			setAddMoviesAmount(2);
+			setMoviesAmount(smallScreenMoviesAmount);
+			setAddMoviesAmount(smallerScreenAddMoviesAmount);
 		}
+	}
+
+	function getAllInfo(token, route) {
+
+		Promise.all([
+			authApi.getUserInfo(token),
+			mainApi.getSavedMovies(token)])
+				.then(([user, userMovies]) => {
+					setCurrentUser({
+						name: user.name,
+						id: user._id,
+						email: user.email,
+						});
+						const movies = userMovies.movies.filter((item) => item.owner === user._id);
+					setSavedMovies(movies);
+				}).then((res) => {
+					setLoggedIn(true);
+					history.push(route);
+				})
+				.catch((err) => {
+					logout();
+					setApiError(err.message)
+				});
 	}
 
 	function tokenCheck() {
 		const jwt = localStorage.getItem('token');
 		if (jwt) {
-			setLoggedIn(true);
-		};
+			const route = location.pathname;
+			getAllInfo(jwt, route);
+		} else {
+			logout();
+		}
 	}
 
 	function handleRegisterSubmit(data, resetForm) {
@@ -135,20 +157,24 @@ function App() {
 	}
 
 	function handleLoginSubmit(data, resetForm) {
+		let token;
 		setPreloaderStarts(true);
 		const { email, password } = data;
 		authApi.auth({ email, password })
 			.then((res) => {
 				if (res.token) {
-					localStorage.setItem('token', res.token);
-					setLoggedIn(true);
-					setApiError('');
-					resetForm();
-					setPreloaderStarts(false);
+					token = res.token;
 				}
+			}).then(() => {
+				const route = '/movies';
+				getAllInfo(token, route);
+				localStorage.setItem('token', token);
+				setApiError('');
+				resetForm();
 			}).catch((err) => {
-				setPreloaderStarts(false);
 				setApiError(err);
+			}).finally(() => {
+				setPreloaderStarts(false);
 			});
 	}
 
@@ -162,6 +188,7 @@ function App() {
 		setFindedSavedMovies([]);
 		setApiError('');
 		setErrorMessage('');
+		setSavedMoviesErrorMessge('');
 		localStorage.removeItem('short');
 		localStorage.removeItem('findingValue');
 		localStorage.removeItem('findedMovies');
@@ -179,11 +206,13 @@ function App() {
 		authApi.patchtUserInfo(jwt, newInfo)
 			.then((res) => {
 				setCurrentUser(res);
-				setPreloaderStarts(false);
+				setPatchIsDone(true);
+
 			}).catch((err) => {
-				setPreloaderStarts(false);
 				setApiError(err);
-			});
+			}).finally(() => {
+				setPreloaderStarts(false);
+			})
 	}
 
 	function handleCheckboxClick() {
@@ -232,7 +261,8 @@ function App() {
 	}
 
 	function getFindedMovies(value, movies) {
-		const result = findByValue(value, movies);
+		const route = 'movies';
+		const result = findByValue(value, movies, route);
 		if (!result) {
 			setFindedMovies([]);
 			setPreloaderStarts(false);
@@ -275,21 +305,22 @@ function App() {
 	}
 
 	function findSavedMovies(value) {
-		setErrorMessage('');
+		const route = 'saved-movies';
+		setSavedMoviesErrorMessge('');
 		setFindedSavedMovies([]);
 		if (!value) {
 			setFindedSavedMovies([]);
 			return setErrorMessage(searchNoValues);
 		} else {
 			if (savedMovies.length === 0) {
-				return setErrorMessage(noSavedMovies);
+				return setSavedMoviesErrorMessge(noSavedMovies);
 			} else {
 				setPreloaderStarts(true);
-				const results = findByValue(value, savedMovies);
+				const results = findByValue(value, savedMovies, route);
 				if (!results) {
 					setFindedSavedMovies([]);
 					setPreloaderStarts(false);
-					return setErrorMessage(searchErrorMovieNotFound);
+					return setSavedMoviesErrorMessge(searchErrorMovieNotFound);
 				} else {
 					if (isSavedMovieShort) {
 						const shortMovies = checkIsMovieShort(results);
@@ -303,12 +334,12 @@ function App() {
 		setPreloaderStarts(false);
 	}
 
-	function findByValue(value, data) {
+	function findByValue(value, data, route) {
 	   const results = data.filter(function (item) {
 			return item.nameRU.toLowerCase().includes(value.toLowerCase()) || item.nameEN.toLowerCase().includes(value.toLowerCase());
 		});
  		if (results.length === 0) {
-			setErrorMessage(searchErrorMovieNotFound);
+			route === 'movies' ? setErrorMessage(searchErrorMovieNotFound) : setSavedMoviesErrorMessge(searchErrorMovieNotFound);
 			return;
 		} else {
 			return results;
@@ -317,13 +348,21 @@ function App() {
 
 	function checkIsMovieShort(movies) {
 		const shortMovies = movies.filter(function (item) {
-			return item.duration <= 40;
+			return item.duration <= shortFilmDuration;
 		})
 		return shortMovies;
 	}
 
 	function removeErrorMessage() {
 		setErrorMessage('');
+	}
+
+	function removeSavedMovieErrorMessage() {
+		setSavedMoviesErrorMessge('');
+	}
+
+	function resetPatchIsDone() {
+		setPatchIsDone(false);
 	}
 
 	function resetApiError() {
@@ -353,13 +392,13 @@ function App() {
 
 				<ProtectedRoute path='/saved-movies' 
 				loggedIn={loggedIn}>
-					<SavedMovies searchError={errorMessage}
+					<SavedMovies searchError={savedMoviesErrorMessage}
 					findedSavedMovies={findedSavedMovies}
 					defaultValue=''
 					isMovieShort={isSavedMovieShort} 
 					removeSavedMovie={removeSavedMovie} 
 					onClick={handleSavedMovieCheckboxClick}
-					onChange={removeErrorMessage}
+					onChange={removeSavedMovieErrorMessage}
 					movies={savedMovies} 
 					findMovies={findSavedMovies}
 					preloaderStarts={preloaderStarts} />
@@ -368,6 +407,8 @@ function App() {
 				<ProtectedRoute path='/profile' 
 				loggedIn={loggedIn}>
 					<Profile logout={logout}
+					patchIsDone={patchIsDone}
+					closeMessage={resetPatchIsDone}
 					resetApiError={resetApiError}
 					apiError={apiError}
 					preloaderStarts={preloaderStarts}

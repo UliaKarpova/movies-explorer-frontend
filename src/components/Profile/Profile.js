@@ -8,8 +8,9 @@ import Header from '../Header/Header';
 import BurgerMenu from '../Navigation/BurgerMenu';
 import FormWithValidation from '../FormWithValidation/FormWithValidation';
 import Preloader from '../Preloader/Preloader';
+import { userDataUpdate } from '../../utils/messages_errors';
 
-function Profile({ logout, resetApiError, apiError, changeUserInfo, preloaderStarts }) {
+function Profile({ logout, resetApiError, apiError, changeUserInfo, preloaderStarts, patchIsDone, closeMessage }) {
     const route = 'profile';
 
     const currentUser = React.useContext(CurrentUserContext);
@@ -96,14 +97,27 @@ function Profile({ logout, resetApiError, apiError, changeUserInfo, preloaderSta
 
                     <div className='profile__buttons'>
                         <button type='submit'
-                        className={`profile__save ${!isValid ? '' : 'profile__save_active'}`}
-                        disabled={!isValid}>Редактировать</button>
+                        className={`profile__save ${!isValid || ((!values.name || values.name === currentUser.name) && 
+                        (!values.email || values.email === currentUser.email)) ? '' : 'profile__save_active'}`}
+                        disabled={!isValid || ((!values.name || values.name === currentUser.name) && 
+                        (!values.email || values.email === currentUser.email))}>Редактировать</button>
 
                         <Link to='/' 
                         onClick={logout} 
                         className='profile__logout'>Выйти из аккаунта</Link>
                     </div>
                 </form>
+
+                { patchIsDone ? (
+                    <div className='profile__message-background'>
+                        <div className='profile__message'>
+                            <p className='profile__message-text'>{userDataUpdate}</p>
+                            <button className='profile__message-button'
+                            onClick={closeMessage}>Ok</button>
+                        </div>
+                    </div>
+                ) : ''
+                }
 
                 { preloaderStarts ? (
                     <div className='preloader__background'>

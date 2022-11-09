@@ -13,10 +13,13 @@ class MainApi {
         return res.json();
     }
 
-    getSavedMovies = () => {
+    getSavedMovies = (jwt) => {
         return fetch(`${this._url}`, {
             method: 'GET',
-            headers: this._headers,
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${jwt}`,
+            }
         }).then(this._getResponseData);
     }
 

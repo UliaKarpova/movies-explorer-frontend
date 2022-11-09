@@ -1,0 +1,10 @@
+.profile__message {
+    height: 150px;
+    width: 250px;
+    border: 1px solid #2BE080;
+    background-color: #fff;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

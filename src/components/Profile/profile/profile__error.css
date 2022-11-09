@@ -15,3 +15,9 @@
     height: 25px;
     line-height: 25px;
 }
+
+.done {
+    color: #fff;
+    background-color: #2BE080;
+    border-radius: 5px;
+}
