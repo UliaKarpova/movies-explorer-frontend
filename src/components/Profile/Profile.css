@@ -5,7 +5,12 @@
 @import url(./profile/profile__row.css);
 @import url(./profile/profile__label.css);
 @import url(./profile/profile__input.css);
+@import url(./profile/profile__error.css);
 @import url(./profile/profile__line.css);
 @import url(./profile/profile__save.css);
 @import url(./profile/profile__logout.css);
 @import url(./profile/profile__buttons.css);
+@import url(./profile/profile__message-background.css);
+@import url(./profile/profile__message.css);
+@import url(./profile/profile__message-text.css);
+@import url(./profile/profile__message-button.css);

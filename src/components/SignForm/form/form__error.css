@@ -6,9 +6,11 @@
     text-align: left;
     color: #EE3465;
     margin-top: -18px;
-    display: none;
+    display: block;
+    height: 24px;
 }
 
-.form__error_visible {
-    display: block;
+.form__error_submit {
+    margin-top: 12px;
+    text-align: center;
 }

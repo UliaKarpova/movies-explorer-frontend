@@ -21,4 +21,5 @@
 
 .uncorrect {
     color: #EE3465;
+    border-bottom: 1px solid #EE3465;
 }

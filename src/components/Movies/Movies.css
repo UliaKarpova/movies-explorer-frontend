@@ -2,3 +2,6 @@
 @import url(./header-children/header__to-profile.css);
 @import url(./header-children/header__to-saved-movies.css);
 @import url(./header-children/header__nav.css);
+@import url(./movies/movies-page.css);
+@import url(./movies/movies-main.css);
+@import url(./movies/search-error.css);

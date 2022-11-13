@@ -6,7 +6,6 @@
     text-align: center;
     color: #A0A0A0;
     margin-top: 0;
-    margin-bottom: 70px;
 }
 
 .form__redirect_green {
@@ -14,15 +13,8 @@
     text-decoration: none;
 }
 
-@media (max-width: 768px) {
-    .form__redirect {
-        margin-bottom: 232px;
-    }
-}
-
 @media (max-width: 600px) {
     .form__redirect {
         font-size: 12px;
-        margin-bottom: 30px;
     }
 }

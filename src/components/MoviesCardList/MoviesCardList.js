@@ -1,14 +1,26 @@
 import React from 'react';
-import './MoviesCardList.css';
-import MoviesCard from '../MoviesCard/MoviesCard';
-import moviesList from '../../utils/moviesList';
 
-function MoviesCardList({isSaved, children}) {
-    const isMovieSaved = isSaved;
-    const movieCards = moviesList.map((movie) => {
+import './MoviesCardList.css';
+
+import MoviesCard from '../MoviesCard/MoviesCard';
+
+function MoviesCardList({ saveMovie, removeSavedMovie, movies, route, children, savedMovies }) {
+    const isSavedRoute = route === 'movies' ? false : true; 
+    
+    const movieCards = !movies ? '' : movies.map((movie) => {
+        let isSaved;
+        if (savedMovies) {
+            isSaved = savedMovies.some((item) => item.movieId === movie.id);
+        }
         return (
-            <li key={movie.movieId} className='movies__card'>
-                <MoviesCard movieDuration={movie.duration} movieImage={movie.image} movieTitle={movie.nameRU} isSaved={isMovieSaved} />
+            <li key={isSavedRoute ? movie._id : movie.id} 
+            className='movies__card'>
+                <MoviesCard 
+                movie={movie}
+                isSaved={isSaved}
+                saveMovie={saveMovie}
+                removeSavedMovie={removeSavedMovie}
+                isSavedRoute={isSavedRoute} />
             </li>
         )
     });
@@ -18,6 +30,7 @@ function MoviesCardList({isSaved, children}) {
             <div className='movies'>
                 {movieCards}
             </div>
+            
             {children}
         </>
     );
